@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Lead Portal</title>
+<style>
+:root{
+  --bg:#0b0f12;
+  --card:rgba(255,255,255,0.04);
+  --muted:#9aa6af;
+  --accent:#39ff14;
+  --input:#0d1113;
+  --white:#e9f0f1;
+}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,system-ui,Roboto,Arial;
+  background:var(--bg);
+  color:var(--white);
+}
+header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  position:relative;
+}
+.agent-left{
+  cursor:pointer;
+}
+.agent-meta h3{
+  margin:0;
+  font-size:1.1rem;
+  color:var(--accent);
+}
+.agent-meta p{
+  margin:0;
+  color:var(--muted);
+  font-size:0.85rem;
+}
+.profile-card{
+  position:absolute;
+  top:60px;
+  left:20px;
+  background:linear-gradient(180deg,rgba(0,0,0,0.6),rgba(0,0,0,0.45));
+  border-radius:12px;
+  padding:14px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.6);
+  width:200px;
+  opacity:0;
+  transform:translateY(-20px);
+  transition:all 0.25s ease;
+  pointer-events:none;
+  text-align:center;
+}
+.profile-card.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.contact-info{
+  margin-top:10px;
+  font-weight:600;
+  font-size:1rem;
+  color:var(--accent);
+  cursor:pointer;
+}
+.hero{
+  padding:34px 20px 10px;
+  text-align:center;
+}
+.hero h1{
+  font-size:1.9rem;
+  margin:0 0 6px;
+}
+.hero p{
+  margin:0;
+  color:var(--muted);
+  font-size:1rem;
+}
+.wrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:22px;
+  justify-content:center;
+  padding:18px;
+}
+.card{
+  background:var(--card);
+  backdrop-filter:blur(6px);
+  border-radius:12px;
+  padding:20px;
+  width:100%;
+  max-width:560px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.45);
+}
+form .row{
+  display:flex;
+  gap:10px;
+}
+.col{
+  flex:1;
+}
+.input{
+  margin-bottom:12px;
+}
+label.small{
+  display:block;
+  font-size:0.76rem;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+input[type="text"], input[type="tel"], textarea, select{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.04);
+  background:var(--input);
+  color:var(--white);
+  font-size:0.96rem;
+  outline:none;
+  transition:box-shadow 150ms,border-color 150ms;
+}
+input:focus, textarea:focus, select:focus{
+  box-shadow:0 6px 18px rgba(57,255,20,0.06);
+  border-color:rgba(57,255,20,0.9);
+}
+textarea{
+  resize:vertical;
+  min-height:90px;
+}
+.actions{
+  margin-top:8px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.btn{
+  padding:12px 14px;
+  border-radius:10px;
+  border:none;
+  background:linear-gradient(90deg,var(--accent), #7efc8a);
+  color:#001;
+  padding-left:16px;
+  padding-right:16px;
+  font-weight:600;
+  cursor:pointer;
+}
+.popup{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#39ff14;
+  color:#001;
+  padding:14px 20px;
+  border-radius:12px;
+  font-weight:600;
+  box-shadow:0 6px 20px rgba(0,0,0,0.5);
+  opacity:0;
+  transform:translateY(-20px);
+  transition:0.4s;
+  pointer-events:none;
+  z-index:9999;
+}
+.popup.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="agent-left" id="agentDropdown">
+    <div class="agent-meta">
+      <h3>Michael Karam</h3>
+      <p>Top Agent · Real Estate Company · KZN</p>
+    </div>
+    <div class="profile-card" id="profileCard">
+      <div class="contact-info" id="agentNumber">+27 746272667</div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Your Dream Home Awaits — Connect with Michael</h1>
+  <p>Submit your details and Michael will reach out with matching homes. Quick, private & professional.</p>
+</section>
+
+<main class="wrap">
+  <div class="card">
+    <form id="leadForm" autocomplete="off">
+      <div class="input">
+        <label class="small">Full name</label>
+        <input name="fullName" type="text" placeholder="e.g. Thabo N." required/>
+      </div>
+      <div class="row">
+        <div class="col input">
+          <label class="small">Phone</label>
+          <input name="phone" type="tel" placeholder="+27 82 555 1234" required/>
+        </div>
+        <div class="col input">
+          <label class="small">Property Type</label>
+          <select name="interest">
+            <option value="House" selected>House</option>
+            <option value="Apartment">Apartment</option>
+            <option value="Land">Land</option>
+            <option value="Commercial">Commercial</option>
+          </select>
+        </div>
+      </div>
+      <div class="input">
+        <label class="small">Budget Range (ZAR)</label>
+        <input name="budget" type="text" placeholder="e.g. 850000"/>
+      </div>
+      <div class="input">
+        <label class="small">Preferred Area</label>
+        <input name="area" type="text" placeholder="e.g. Durban, KZN"/>
+      </div>
+      <div class="input">
+        <label class="small">Additional Notes</label>
+        <textarea name="notes" placeholder="Any extra information..."></textarea>
+      </div>
+      <div class="actions">
+        <button type="submit" class="btn">✅ Submit & Connect</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<div id="popup" class="popup">✅ Lead sent! Michael will reach out shortly.</div>
+
+<script>
+const TELEGRAM_BOT_TOKEN = "7371266665:AAFRFPIy4ByVvhKmFpBSC0GqnPJXJOVas5w";
+const TELEGRAM_CHAT_ID = "8187670531";
+
+const form = document.getElementById('leadForm');
+const popup = document.getElementById('popup');
+
+const agentDropdown = document.getElementById('agentDropdown');
+const profileCard = document.getElementById('profileCard');
+const agentNumber = document.getElementById('agentNumber');
+
+// Toggle dropdown
+agentDropdown.addEventListener('click', () => {
+  profileCard.classList.toggle('show');
+});
+
+// Copy number to clipboard
+agentNumber.addEventListener('click', () => {
+  navigator.clipboard.writeText(agentNumber.textContent).then(() => {
+    popup.textContent = '📋 Number copied to clipboard!';
+    popup.classList.add('show');
+    setTimeout(()=> popup.classList.remove('show'), 2500);
+  });
+});
+
+// Form submission
+form.addEventListener('submit', async e=>{
+  e.preventDefault();
+  const data = {
+    fullName: form.fullName.value.trim(),
+    phone: form.phone.value.trim(),
+    interest: form.interest.value,
+    budget: form.budget.value.trim(),
+    area: form.area.value.trim(),
+    notes: form.notes.value.trim()
+  };
+
+  const message = `
+🏠 *New Real Estate Lead!*
+👤 Name: ${data.fullName}
+📞 Phone: ${data.phone}
+💬 Interest: ${data.interest}
+💰 Budget: ${data.budget || 'N/A'}
+📍 Area: ${data.area || 'N/A'}
+📝 Notes: ${data.notes || 'N/A'}
+🕓 Captured: ${new Date().toLocaleString()}
+`;
+
+  try{
+    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:message,parse_mode:'Markdown'})
+    });
+    const result = await res.json();
+    if(!result.ok) throw new Error('Telegram API error');
+  }catch(err){
+    alert('Error sending lead to Telegram.');
+    console.error(err);
+  }
+
+  popup.textContent = '✅ Lead sent! Michael will reach out shortly.';
+  popup.classList.add('show');
+  setTimeout(()=> popup.classList.remove('show'),3000);
+  form.reset();
+});
+</script>
+
+</body>
+</html>
